@@ -8,6 +8,7 @@ export function lastFindInArray (array, callback) {
 
 export function escapeHtmlCharacters (html, opt = { detectCodeBlock: false }) {
   const matchHtmlRegExp = /["'&<>]/g
+  const matchCodeBlockRegExp = /```/g
   const escapes = ['&quot;', '&amp;', '&#39;', '&lt;', '&gt;']
   let match = null
   const replaceAt = (str, index, replace) =>
@@ -15,9 +16,10 @@ export function escapeHtmlCharacters (html, opt = { detectCodeBlock: false }) {
     replace +
     str.substr(index + replace.length - (replace.length - 1))
 
-  // detecting code block
-  while ((match = matchHtmlRegExp.exec(html)) != null) {
+  while ((match = matchHtmlRegExp.exec(html)) !== null) {
     const current = { char: match[0], index: match.index }
+    const codeBlockIndexs = []
+    let openCodeBlock = null
     if (opt.detectCodeBlock) {
       // position of the nearest line start
       let previousLineEnd = current.index - 1
@@ -32,6 +34,27 @@ export function escapeHtmlCharacters (html, opt = { detectCodeBlock: false }) {
         html[previousLineEnd + 4] === ' '
       ) {
         // so skip it
+        continue
+      }
+      // if the character is in ``` means, it's in a code block
+      // detecting code block
+      while ((openCodeBlock = matchCodeBlockRegExp.exec(html)) !== null) {
+        codeBlockIndexs.push(openCodeBlock.index)
+      }
+      let shouldSkipChar = false
+      for (let i = 0; i < codeBlockIndexs.length; i += 2) {
+        // this is an open ``` so index is the first ` and + 2 is the last `
+        // the second index is the closing ``` so the char must less than it
+        if (
+          current.index > codeBlockIndexs[i] + 2 &&
+          current.index < codeBlockIndexs[i + 1]
+        ) {
+          // skip it
+          shouldSkipChar = true
+          break
+        }
+      }
+      if (shouldSkipChar) {
         continue
       }
     }
