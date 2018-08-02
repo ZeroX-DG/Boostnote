@@ -6,7 +6,10 @@ export function lastFindInArray (array, callback) {
   }
 }
 
-export function escapeHtmlCharacters (html, opt = { detectCodeBlock: false }) {
+export function escapeHtmlCharacters (
+  html,
+  opt = { detectCodeBlock: false, skipSingleQuote: false }
+) {
   const matchHtmlRegExp = /["'&<>]/g
   const matchCodeBlockRegExp = /```/g
   const escapes = ['&quot;', '&amp;', '&#39;', '&lt;', '&gt;']
@@ -101,7 +104,7 @@ export function escapeHtmlCharacters (html, opt = { detectCodeBlock: false }) {
       }
     } else if (current.char === '"') {
       html = replaceAt(html, current.index, '&quot;')
-    } else if (current.char === "'") {
+    } else if (current.char === "'" && !opt.skipSingleQuote) {
       html = replaceAt(html, current.index, '&#39;')
     } else if (current.char === '<') {
       html = replaceAt(html, current.index, '&lt;')

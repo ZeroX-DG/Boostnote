@@ -444,14 +444,6 @@ export default class MarkdownPreview extends React.Component {
     let { value, codeBlockTheme } = this.props
 
     this.refs.root.contentWindow.document.body.setAttribute('data-theme', theme)
-
-    // We don't need to re-encode the encoded string as it has already been encoded in markdown-it-sanitize-html.js
-    // const codeBlocks = value.match(/(```)(.|[\n])*?(```)/g)
-    // if (codeBlocks !== null) {
-    //   codeBlocks.forEach((codeBlock) => {
-    //     value = value.replace(codeBlock, htmlTextHelper.encodeEntities(codeBlock))
-    //   })
-    // }
     const renderedHTML = this.markdown.render(value)
     attachmentManagement.migrateAttachments(renderedHTML, storagePath, noteKey)
     this.refs.root.contentWindow.document.body.innerHTML = attachmentManagement.fixLocalURLS(renderedHTML, storagePath)
