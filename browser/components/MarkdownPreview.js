@@ -139,7 +139,6 @@ const scrollBarStyle = `
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.15);
 }
 `
 const scrollBarDarkStyle = `
@@ -148,7 +147,11 @@ const scrollBarDarkStyle = `
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.8); 
+}
+
+::-webkit-scrollbar-track {
 }
 `
 
