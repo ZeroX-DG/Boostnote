@@ -22,7 +22,7 @@
 
 .zoom
   navButtonColor()
-  color rgba(0,0,0,.54)
+  color $ui-text-color
   height 20px
   display flex
   padding 0
@@ -80,3 +80,15 @@ body[data-theme="monokai"]
       color $ui-monokai-active-color
     &:active
       color $ui-monokai-active-color
+
+body[data-theme="white"]
+   navButtonColor()
+  .zoom
+    border-color $ui-borderColor
+    color $ui-text-color
+    &:hover
+      transition 0.15s
+      color $ui-active-color
+    &:active
+      color $ui-active-color
+
