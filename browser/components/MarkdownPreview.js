@@ -133,6 +133,12 @@ body p {
 `
 }
 
+//
+// apply style to the scroll bar for 
+// pre view and split view
+// 
+// todo: apply fix to all themes
+// 
 const scrollBarStyle = `
 ::-webkit-scrollbar {
   width: 12px;
@@ -140,18 +146,20 @@ const scrollBarStyle = `
 
 ::-webkit-scrollbar-thumb {
 }
+
 `
 const scrollBarDarkStyle = `
+::-webkit-scrollbar-track {
+  background-color: ${ui-dark-backgroundColor};
+}
+
 ::-webkit-scrollbar {
   width: 12px;
+  background-color: ${ui-dark-backgroundColor};
 }
 
 ::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.8); 
-}
-
-::-webkit-scrollbar-track {
+  background-color: ${ui-dark-text-color};
 }
 `
 
