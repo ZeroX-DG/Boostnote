@@ -137,29 +137,63 @@ body p {
 // apply style to the scroll bar for 
 // pre view and split view
 // 
-// todo: apply fix to all themes
-// 
 const scrollBarStyle = `
+::-webkit-scrollbar-track {
+  background-color: #FFFFFF;
+}
+
 ::-webkit-scrollbar {
   width: 12px;
+  background-color: #FFFFFF;
 }
 
 ::-webkit-scrollbar-thumb {
+  background-color: #DDDDDD; // $ui-dark-text-color = #DDDDDD ?
+}
+`
+
+const scrollBarSolarizedDarkStyle = `
+::-webkit-scrollbar-track {
+  background-color: #073642; // $ui-solarized-dark-backgroundColor = #073642
 }
 
+::-webkit-scrollbar {
+  width: 12px;
+  background-color: #073642; // $ui-solarized-dark-backgroundColor = #073642
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #93a1a1; // $ui-solarized-dark-text-color = #93a1a1
+}
 `
+
+const scrollBarMonokaiStyle = `
+::-webkit-scrollbar-track {
+  background-color: #272822; // $ui-monokai-backgroundColor = #272822
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  background-color: #272822; // $ui-monokai-backgroundColor = #272822
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #f8f8f2; // $ui-monokai-text-color = #f8f8f2
+}
+`
+
 const scrollBarDarkStyle = `
 ::-webkit-scrollbar-track {
-  background-color: ${ui-dark-backgroundColor};
+  background-color: #2C3033; // $ui-dark-backgroundColor = #2C3033
 }
 
 ::-webkit-scrollbar {
   width: 12px;
-  background-color: ${ui-dark-backgroundColor};
+  background-color: #2C3033; // $ui-dark-backgroundColor = #2C3033
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: ${ui-dark-text-color};
+  background-color: #DDDDDD; // $ui-dark-text-color = #DDDDDD
 }
 `
 
@@ -352,9 +386,12 @@ export default class MarkdownPreview extends React.Component {
 
     switch (theme) {
       case 'dark':
-      case 'solarized-dark':
-      case 'monokai':
         return scrollBarDarkStyle
+      case 'solarized-dark':
+        return scrollBarSolarizedDarkStyle
+      case 'monokai':
+        return scrollBarMonokaiStyle
+      case 'white':
       default:
         return scrollBarStyle
     }

@@ -55,7 +55,7 @@ body[data-theme="dark"]
   .zoom
     border-color $ui-dark-borderColor
     background-color transparent
-    color #f9f9f9
+    color $ui-dark-text-color
     &:hover
       transition 0.15s
       color $ui-dark-text-color
@@ -73,7 +73,7 @@ body[data-theme="dark"]
 body[data-theme="monokai"]
    navButtonColor()
   .zoom
-    border-color $ui-dark-borderColor
+    border-color $ui-monokai-borderColor
     color $ui-monokai-text-color
     &:hover
       transition 0.15s
@@ -81,11 +81,11 @@ body[data-theme="monokai"]
     &:active
       color $ui-monokai-active-color
 
-body[data-theme="white"]
+body[data-theme="solarized-dark"]
    navButtonColor()
   .zoom
-    border-color $ui-borderColor
-    color $ui-text-color
+    border-color $ui-solarized-dark-borderColor
+    color $ui-solarized-dark-text-color
     &:hover
       transition 0.15s
       color $ui-active-color
