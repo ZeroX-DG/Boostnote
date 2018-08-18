@@ -133,10 +133,10 @@ body p {
 `
 }
 
-//
-// apply style to the scroll bar for 
-// pre view and split view
-// 
+/**
+ * apply style to the scroll bar for pre view and split view
+ *
+ */
 const scrollBarStyle = `
 ::-webkit-scrollbar-track {
   background-color: #FFFFFF;
@@ -148,52 +148,52 @@ const scrollBarStyle = `
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #DDDDDD; // $ui-dark-text-color = #DDDDDD ?
+  background-color: #DDDDDD; /* $ui-dark-text-color = #DDDDDD ? */
 }
 `
 
 const scrollBarSolarizedDarkStyle = `
 ::-webkit-scrollbar-track {
-  background-color: #073642; // $ui-solarized-dark-backgroundColor = #073642
+  background-color: #073642; /* $ui-solarized-dark-backgroundColor = #073642 */
 }
 
 ::-webkit-scrollbar {
   width: 12px;
-  background-color: #073642; // $ui-solarized-dark-backgroundColor = #073642
+  background-color: #073642; /* $ui-solarized-dark-backgroundColor = #073642 */
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #93a1a1; // $ui-solarized-dark-text-color = #93a1a1
+  background-color: #93a1a1; /* $ui-solarized-dark-text-color = #93a1a1 */
 }
 `
 
 const scrollBarMonokaiStyle = `
 ::-webkit-scrollbar-track {
-  background-color: #272822; // $ui-monokai-backgroundColor = #272822
+  background-color: #272822; /* $ui-monokai-backgroundColor = #272822 */
 }
 
 ::-webkit-scrollbar {
   width: 12px;
-  background-color: #272822; // $ui-monokai-backgroundColor = #272822
+  background-color: #272822; /* $ui-monokai-backgroundColor = #272822 */
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #f8f8f2; // $ui-monokai-text-color = #f8f8f2
+  background-color: #f8f8f2; /* $ui-monokai-text-color = #f8f8f2 */
 }
 `
 
 const scrollBarDarkStyle = `
 ::-webkit-scrollbar-track {
-  background-color: #2C3033; // $ui-dark-backgroundColor = #2C3033
+  background-color: #2C3033; /* $ui-dark-backgroundColor = #2C3033 */
 }
 
 ::-webkit-scrollbar {
   width: 12px;
-  background-color: #2C3033; // $ui-dark-backgroundColor = #2C3033
+  background-color: #2C3033; /* $ui-dark-backgroundColor = #2C3033 */
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #DDDDDD; // $ui-dark-text-color = #DDDDDD
+  background-color: #DDDDDD; /* $ui-dark-text-color = #DDDDDD */
 }
 `
 
