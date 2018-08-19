@@ -140,6 +140,7 @@ body p {
 const scrollBarStyle = `
 ::-webkit-scrollbar-track {
   background-color: #FFFFFF;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 }
 
 ::-webkit-scrollbar {
@@ -148,13 +149,14 @@ const scrollBarStyle = `
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #DDDDDD; /* $ui-dark-text-color = #DDDDDD ? */
+  background-color: rgba(0,0,0,0.3); 
 }
 `
 
 const scrollBarSolarizedDarkStyle = `
 ::-webkit-scrollbar-track {
   background-color: #073642; /* $ui-solarized-dark-backgroundColor = #073642 */
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 }
 
 ::-webkit-scrollbar {
@@ -163,13 +165,14 @@ const scrollBarSolarizedDarkStyle = `
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #93a1a1; /* $ui-solarized-dark-text-color = #93a1a1 */
+  background-color: rgba(0,0,0,0.3); 
 }
 `
 
 const scrollBarMonokaiStyle = `
 ::-webkit-scrollbar-track {
   background-color: #272822; /* $ui-monokai-backgroundColor = #272822 */
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 }
 
 ::-webkit-scrollbar {
@@ -178,13 +181,14 @@ const scrollBarMonokaiStyle = `
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #f8f8f2; /* $ui-monokai-text-color = #f8f8f2 */
+  background-color: rgba(0,0,0,0.3);
 }
 `
 
 const scrollBarDarkStyle = `
 ::-webkit-scrollbar-track {
   background-color: #2C3033; /* $ui-dark-backgroundColor = #2C3033 */
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 }
 
 ::-webkit-scrollbar {
@@ -193,7 +197,7 @@ const scrollBarDarkStyle = `
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #DDDDDD; /* $ui-dark-text-color = #DDDDDD */
+  background-color: rgba(0,0,0,0.3); 
 }
 `
 
