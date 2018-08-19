@@ -133,22 +133,71 @@ body p {
 `
 }
 
+/**
+ * apply style to the scroll bar for pre view and split view
+ *
+ */
 const scrollBarStyle = `
+::-webkit-scrollbar-track {
+  background-color: #FFFFFF;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
 ::-webkit-scrollbar {
   width: 12px;
+  background-color: #FFFFFF;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.15);
+  background-color: rgba(0,0,0,0.3); 
 }
 `
-const scrollBarDarkStyle = `
+
+const scrollBarSolarizedDarkStyle = `
+::-webkit-scrollbar-track {
+  background-color: #073642; /* $ui-solarized-dark-backgroundColor = #073642 */
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
 ::-webkit-scrollbar {
   width: 12px;
+  background-color: #073642; /* $ui-solarized-dark-backgroundColor = #073642 */
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0,0,0,0.3); 
+}
+`
+
+const scrollBarMonokaiStyle = `
+::-webkit-scrollbar-track {
+  background-color: #272822; /* $ui-monokai-backgroundColor = #272822 */
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  background-color: #272822; /* $ui-monokai-backgroundColor = #272822 */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.3);
+}
+`
+
+const scrollBarDarkStyle = `
+::-webkit-scrollbar-track {
+  background-color: #2C3033; /* $ui-dark-backgroundColor = #2C3033 */
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  background-color: #2C3033; /* $ui-dark-backgroundColor = #2C3033 */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.3); 
 }
 `
 
@@ -341,9 +390,12 @@ export default class MarkdownPreview extends React.Component {
 
     switch (theme) {
       case 'dark':
-      case 'solarized-dark':
-      case 'monokai':
         return scrollBarDarkStyle
+      case 'solarized-dark':
+        return scrollBarSolarizedDarkStyle
+      case 'monokai':
+        return scrollBarMonokaiStyle
+      case 'white':
       default:
         return scrollBarStyle
     }
