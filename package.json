@@ -100,7 +100,8 @@
     "sanitize-html": "^1.18.2",
     "striptags": "^2.2.1",
     "unique-slug": "2.0.0",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "waving": "^1.0.3"
   },
   "devDependencies": {
     "ava": "^0.25.0",
