@@ -9070,10 +9070,6 @@ watchpack@^0.2.1:
     chokidar "^1.0.0"
     graceful-fs "^4.1.2"
 
-waving@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/waving/-/waving-1.0.3.tgz#42d97790634f9875f52a730c5c40f064f6048c9c"
-
 webidl-conversions@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-3.0.1.tgz#24534275e2a7bc6be7bc86611cc16ae0a5654871"

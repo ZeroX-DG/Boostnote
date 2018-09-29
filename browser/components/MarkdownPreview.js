@@ -18,7 +18,6 @@ import mdurl from 'mdurl'
 import exportNote from 'browser/main/lib/dataApi/exportNote'
 import { escapeHtmlCharacters } from 'browser/lib/utils'
 
-const Waving = require('waving')
 const { remote } = require('electron')
 const attachmentManagement = require('../main/lib/dataApi/attachmentManagement')
 
@@ -34,8 +33,7 @@ const appPath = fileUrl(
 )
 const CSS_FILES = [
   `${appPath}/node_modules/katex/dist/katex.min.css`,
-  `${appPath}/node_modules/codemirror/lib/codemirror.css`,
-  `${appPath}/node_modules/waving/dist/waving.css`
+  `${appPath}/node_modules/codemirror/lib/codemirror.css`
 ]
 
 function buildStyle (
@@ -755,14 +753,6 @@ export default class MarkdownPreview extends React.Component {
       this.refs.root.contentWindow.document.querySelectorAll('.mermaid'),
       el => {
         mermaidRender(el, htmlTextHelper.decodeEntities(el.innerHTML), theme)
-      }
-    )
-
-    _.forEach(
-      this.refs.root.contentWindow.document.querySelectorAll('.audio-player'),
-      el => {
-        const player = new Waving(el)
-        player.setAudio(el.dataset.src)
       }
     )
   }
