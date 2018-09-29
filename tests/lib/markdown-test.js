@@ -43,3 +43,8 @@ test('Markdown.render() should render line breaks correctly', t => {
   const renderedNonBreaks = newmd.render(markdownFixtures.breaks)
   t.snapshot(renderedNonBreaks)
 })
+
+test('Markdown.render() should render audio correctly', t => {
+  const rendered = md.render(markdownFixtures.audio)
+  t.snapshot(rendered)
+})

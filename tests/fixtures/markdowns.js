@@ -50,6 +50,13 @@ const smartQuotes = 'This is a "QUOTE".'
 
 const breaks = 'This is the first line.\nThis is the second line.'
 
+const audio = `
+@(audio.mp3)
+
+Audio must be at start of input or the previous line must be blank.
+@(notaudio.mp3)
+`
+
 export default {
   basic,
   codeblock,
