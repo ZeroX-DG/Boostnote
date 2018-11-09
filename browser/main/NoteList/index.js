@@ -56,7 +56,6 @@ class NoteList extends React.Component {
     super(props)
 
     this.selectNextNoteHandler = () => {
-      console.log('fired next')
       this.selectNextNote()
     }
     this.selectPriorNoteHandler = () => {
@@ -519,7 +518,7 @@ class NoteList extends React.Component {
         click: this.cloneNote.bind(this)
       }, {
         label: copyNoteLink,
-        click: this.copyNoteLink(note)
+        click: this.copyNoteLink.bind(this, note)
       })
       if (note.type === 'MARKDOWN_NOTE') {
         if (note.blog && note.blog.blogLink && note.blog.blogId) {
@@ -616,7 +615,6 @@ class NoteList extends React.Component {
       .catch((err) => {
         console.error('Cannot Delete note: ' + err)
       })
-      console.log('Notes were all deleted')
     } else {
       if (!confirmDeleteNote(confirmDeletion, false)) return
 
@@ -636,7 +634,6 @@ class NoteList extends React.Component {
           })
         })
         AwsMobileAnalyticsConfig.recordDynamicCustomEvent('EDIT_NOTE')
-        console.log('Notes went to trash')
       })
       .catch((err) => {
         console.error('Notes could not go to trash: ' + err)
@@ -996,6 +993,7 @@ class NoteList extends React.Component {
               folderName={this.getNoteFolder(note).name}
               storageName={this.getNoteStorage(note).name}
               viewType={viewType}
+              showTagsAlphabetically={config.ui.showTagsAlphabetically}
             />
           )
         }
