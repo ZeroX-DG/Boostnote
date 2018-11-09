@@ -1,8 +1,10 @@
 'use strict'
-
+import { normalizeReference } from 'markdown-it/lib/common/utils'
 module.exports = function audioPlugin (md) {
   function audio (state, startLine) {
-    const audioSouceRegex = /^@\((.*?)\)/
+    // match @[](src.mp3) or @[refsrc]
+    const audioSouceRegex = /^@\[\]\((.*?)\)/
+    const audioReferenceSourceRegex = /^@\[(.*?)\]/
     const start = state.bMarks[startLine]
     const end = state.eMarks[startLine]
     let token = null
@@ -17,14 +19,23 @@ module.exports = function audioPlugin (md) {
       if (prevLineMaxPos > prevLineStartPos) return false
     }
 
-    const match = audioSouceRegex.exec(state.src.slice(start, end))
-
+    let match = audioSouceRegex.exec(state.src.slice(start, end))
+    if (!match || match.length < 2) {
+      match = audioReferenceSourceRegex.exec(state.src.slice(start, end))
+    }
     if (!match || match.length < 2) {
       return false
     }
+    let src = match[1]
+    // this is a reference link
+    if (!src.endsWith('.mp3')) {
+      if (typeof state.env.references === 'undefined') {
+        return false
+      }
+      src = state.env.references[normalizeReference(src)].href
+    }
     token = state.push('audio')
     state.line = startLine + 1
-    const src = match[1]
     token.src = src
     return true
   }
