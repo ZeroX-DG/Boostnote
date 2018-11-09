@@ -28,7 +28,7 @@ module.exports = function audioPlugin (md) {
     }
     let src = match[1]
     // this is a reference link
-    if (!src.endsWith('.mp3')) {
+    if (!src.endsWith('.mp3') && !src.endsWith('.wav') && !src.endsWith('.ogg')) {
       if (typeof state.env.references === 'undefined') {
         return false
       }
