@@ -3,7 +3,7 @@ import { normalizeReference } from 'markdown-it/lib/common/utils'
 module.exports = function audioPlugin (md) {
   function audio (state, startLine) {
     // match @[](src.mp3) or @[refsrc]
-    const audioSouceRegex = /^@\[\]\((.*?)\)/
+    const audioSouceRegex = /^@\[.*\]\((.*?)\)/
     const audioReferenceSourceRegex = /^@\[(.*?)\]/
     const start = state.bMarks[startLine]
     const end = state.eMarks[startLine]

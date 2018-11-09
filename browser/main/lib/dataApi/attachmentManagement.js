@@ -254,7 +254,7 @@ function generateAttachmentMarkdown (fileName, path, showPreview, previewType) {
     case FILE_TYPES.IMAGE:
       return `![${fileName}](${path})`
     case FILE_TYPES.AUDIO:
-      return `@[](${path})`
+      return `@[${fileName}](${path})`
   }
 }
 
