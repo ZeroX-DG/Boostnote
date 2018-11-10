@@ -242,7 +242,7 @@ function fixLocalURLS (renderedHTML, storagePath) {
  * @description Generates the markdown code for a given attachment
  * @param {String} fileName Name of the attachment
  * @param {String} path Path of the attachment
- * @param {Boolean} showPreview Indicator whether the generated markdown should show a preview of the image.
+ * @param {Boolean} showPreview Indicator whether the generated markdown should show a preview of the attachment.
  * @param {String} previewType Name of the type of attachment to preview
  * @returns {String} Generated markdown code
  */

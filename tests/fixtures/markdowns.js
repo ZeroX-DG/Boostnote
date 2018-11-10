@@ -51,10 +51,16 @@ const smartQuotes = 'This is a "QUOTE".'
 const breaks = 'This is the first line.\nThis is the second line.'
 
 const audio = `
-@(audio.mp3)
+@[audio.mp3]
 
 Audio must be at start of input or the previous line must be blank.
-@(notaudio.mp3)
+@[notaudio.mp3]
+
+@[audio](audio.mp3)
+
+[ref]: audio.mp3
+
+@[ref]
 `
 const abbrevations = `
 ## abbr
@@ -121,5 +127,6 @@ export default {
   subTexts,
   supTexts,
   deflists,
-  shortcuts
+  shortcuts,
+  audio
 }
