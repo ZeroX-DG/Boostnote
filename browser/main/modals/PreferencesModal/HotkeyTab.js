@@ -16,7 +16,65 @@ class HotkeyTab extends React.Component {
 
     this.state = {
       isHotkeyHintOpen: false,
-      config: props.config
+      config: props.config,
+      hotkeys: [
+        {
+          name: 'toggleMain',
+          label: i18n.__('Show/Hide Boostnote')
+        },
+        {
+          name: 'toggleMode',
+          label: i18n.__('Toggle Editor Mode')
+        },
+        {
+          name: 'deleteNote',
+          label: i18n.__('Delete Note')
+        },
+        {
+          name: 'pasteSmartly',
+          label: i18n.__('Paste HTML')
+        },
+        {
+          name: 'reload',
+          label: i18n.__('Reload')
+        },
+        {
+          name: 'devTool',
+          label: i18n.__('Toggle Developer Tools')
+        },
+        {
+          name: 'nextNode',
+          label: i18n.__('Next Note')
+        },
+        {
+          name: 'prevNode',
+          label: i18n.__('Previous Note')
+        },
+        {
+          name: 'focusSearch',
+          label: i18n.__('Focus Search')
+        },
+        {
+          name: 'fullScreen',
+          label: i18n.__('Toggle Full Screen')
+        },
+        {
+          name: 'toggleSideBar',
+          label: i18n.__('Toggle Side Bar')
+        },
+        {
+          name: 'actualSize',
+          label: i18n.__('Actual Size')
+        },
+        {
+          name: 'zoomIn',
+          label: i18n.__('Zoom In')
+        },
+        {
+          name: 'zoomOut',
+          label: i18n.__('Zoom Out')
+        }
+      ]
     }
   }
 
@@ -75,16 +133,13 @@ class HotkeyTab extends React.Component {
   }
 
   handleHotkeyChange (e) {
-    const { config } = this.state
-    config.hotkey = {
-      toggleMain: this.refs.toggleMain.value,
-      toggleMode: this.refs.toggleMode.value,
-      deleteNote: this.refs.deleteNote.value,
-      pasteSmartly: this.refs.pasteSmartly.value
-    }
-    this.setState({
-      config
+    const { config, hotkeys } = this.state
+
+    config.hotkey = {}
+    hotkeys.forEach(({name}) => {
+      config.hotkey[name] = this.refs[name].value
     })
+
     if (_.isEqual(this.oldHotkey, config.hotkey)) {
       this.props.haveToSave()
     } else {
@@ -111,56 +166,27 @@ class HotkeyTab extends React.Component {
         {keymapAlert.message}
       </p>
       : null
-    const { config } = this.state
+    const { config, hotkeys } = this.state
+
+    const rows = hotkeys.map(({label, name}) => (
+      <div styleName='group-section' key={name}>
+        <div styleName='group-section-label'>{label}</div>
+        <div styleName='group-section-control'>
+          <input styleName='group-section-control-input'
+            onChange={(e) => this.handleHotkeyChange(e)}
+            ref={name}
+            value={config.hotkey[name]}
+            type='text'
+          />
+        </div>
+      </div>
+    ))
 
     return (
       <div styleName='root'>
         <div styleName='group'>
           <div styleName='group-header'>{i18n.__('Hotkeys')}</div>
-          <div styleName='group-section'>
-            <div styleName='group-section-label'>{i18n.__('Show/Hide Boostnote')}</div>
-            <div styleName='group-section-control'>
-              <input styleName='group-section-control-input'
-                onChange={(e) => this.handleHotkeyChange(e)}
-                ref='toggleMain'
-                value={config.hotkey.toggleMain}
-                type='text'
-              />
-            </div>
-          </div>
-          <div styleName='group-section'>
-            <div styleName='group-section-label'>{i18n.__('Toggle Editor Mode')}</div>
-            <div styleName='group-section-control'>
-              <input styleName='group-section-control-input'
-                onChange={(e) => this.handleHotkeyChange(e)}
-                ref='toggleMode'
-                value={config.hotkey.toggleMode}
-                type='text'
-              />
-            </div>
-          </div>
-          <div styleName='group-section'>
-            <div styleName='group-section-label'>{i18n.__('Delete Note')}</div>
-            <div styleName='group-section-control'>
-              <input styleName='group-section-control-input'
-                onChange={(e) => this.handleHotkeyChange(e)}
-                ref='deleteNote'
-                value={config.hotkey.deleteNote}
-                type='text'
-              />
-            </div>
-          </div>
-          <div styleName='group-section'>
-            <div styleName='group-section-label'>{i18n.__('Paste HTML')}</div>
-            <div styleName='group-section-control'>
-              <input styleName='group-section-control-input'
-                onChange={(e) => this.handleHotkeyChange(e)}
-                ref='pasteSmartly'
-                value={config.hotkey.pasteSmartly}
-                type='text'
-              />
-            </div>
-          </div>
+          {rows}
           <div styleName='group-control'>
             <button styleName='group-control-leftButton'
               onClick={(e) => this.handleHintToggleButtonClick(e)}

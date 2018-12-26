@@ -26,7 +26,17 @@ export const DEFAULT_CONFIG = {
     toggleMain: OSX ? 'Command + Alt + L' : 'Super + Alt + E',
     toggleMode: OSX ? 'Command + Alt + M' : 'Ctrl + M',
     deleteNote: OSX ? 'Command + Shift + Backspace' : 'Ctrl + Shift + Backspace',
-    pasteSmartly: OSX ? 'Command + Shift + V' : 'Ctrl + Shift + V'
+    pasteSmartly: OSX ? 'Command + Shift + V' : 'Ctrl + Shift + V',
+    reload: OSX ? 'Command + R' : 'Ctrl + R',
+    devTool: OSX ? 'Command + Alt + I' : 'Control + Shift + I',
+    nextNode: OSX ? 'Command + ]' : 'Ctrl + ]',
+    prevNode: OSX ? 'Command + [' : 'Ctrl + [',
+    focusSearch: OSX ? 'Command + Shift + L' : 'Ctrl + Shift + L',
+    fullScreen: OSX ? 'Command + Control + F' : 'F11',
+    toggleSideBar: OSX ? 'Command + B' : 'Ctrl + B',
+    actualSize: OSX ? 'Command + 0' : 'Ctrl + 0',
+    zoomIn: OSX ? 'Command + =' : 'Ctrl + =',
+    zoomOut: OSX ? 'Command + -' : 'Ctrl + -'
   },
   ui: {
     language: 'en',
