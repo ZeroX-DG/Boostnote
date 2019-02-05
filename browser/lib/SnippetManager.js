@@ -37,7 +37,7 @@ class SnippetManager {
     this.snippets = this.defaultSnippet
   }
 
-  assignSnippet (snippets) {
+  assignSnippets (snippets) {
     this.snippets = snippets
   }
 

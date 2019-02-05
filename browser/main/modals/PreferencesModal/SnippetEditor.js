@@ -66,7 +66,7 @@ class SnippetEditor extends React.Component {
 
   saveSnippet () {
     dataApi.updateSnippet(this.snippet)
-      .then(snippets => snippetManager.assignSnippet(snippets))
+      .then(snippets => snippetManager.assignSnippets(snippets))
       .catch((err) => { throw err })
   }
 
