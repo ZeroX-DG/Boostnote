@@ -42,9 +42,10 @@ class MarkdownNoteDetail extends React.Component {
         content: '',
         linesHighlighted: []
       }, props.note),
-      isLockButtonShown: false,
+      isLockButtonShown: props.config.editor.type !== 'SPLIT',
       isLocked: false,
-      editorType: props.config.editor.type
+      editorType: props.config.editor.type,
+      switchPreview: props.config.editor.switchPreview
     }
 
     this.dispatchTimer = null
@@ -65,6 +66,9 @@ class MarkdownNoteDetail extends React.Component {
     })
     ee.on('hotkey:deletenote', this.handleDeleteNote.bind(this))
     ee.on('code:generate-toc', this.generateToc)
+
+    // Focus content if using blur or double click
+    if (this.state.switchPreview === 'BLUR' || this.state.switchPreview === 'DBL_CLICK') this.focus()
   }
 
   componentWillReceiveProps (nextProps) {
@@ -96,7 +100,12 @@ class MarkdownNoteDetail extends React.Component {
   handleUpdateContent () {
     const { note } = this.state
     note.content = this.refs.content.value
-    note.title = markdown.strip(striptags(findNoteTitle(note.content, this.props.config.editor.enableFrontMatterTitle, this.props.config.editor.frontMatterTitleField)))
+
+    let title = findNoteTitle(note.content, this.props.config.editor.enableFrontMatterTitle, this.props.config.editor.frontMatterTitleField)
+    title = striptags(title)
+    title = markdown.strip(title)
+    note.title = title
+
     this.updateNote(note)
   }
 
@@ -294,7 +303,7 @@ class MarkdownNoteDetail extends React.Component {
 
   handleToggleLockButton (event, noteStatus) {
     // first argument event is not used
-    if (this.props.config.editor.switchPreview === 'BLUR' && noteStatus === 'CODE') {
+    if (noteStatus === 'CODE') {
       this.setState({isLockButtonShown: true})
     } else {
       this.setState({isLockButtonShown: false})
@@ -320,7 +329,8 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   handleSwitchMode (type) {
-    this.setState({ editorType: type }, () => {
+    // If in split mode, hide the lock button
+    this.setState({ editorType: type, isLockButtonShown: !(type === 'SPLIT') }, () => {
       this.focus()
       const newConfig = Object.assign({}, this.props.config)
       newConfig.editor.type = type
@@ -365,6 +375,7 @@ class MarkdownNoteDetail extends React.Component {
         noteKey={note.key}
         linesHighlighted={note.linesHighlighted}
         onChange={this.handleUpdateContent.bind(this)}
+        isLocked={this.state.isLocked}
         ignorePreviewPointerEvents={ignorePreviewPointerEvents}
       />
     } else {

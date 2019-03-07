@@ -41,7 +41,7 @@ export const DEFAULT_CONFIG = {
     theme: 'base16-light',
     keyMap: 'sublime',
     fontSize: '14',
-    fontFamily: win ? 'Segoe UI' : 'Monaco, Consolas',
+    fontFamily: win ? 'Consolas' : 'Monaco',
     indentType: 'space',
     indentSize: '2',
     enableRulers: false,
@@ -211,7 +211,7 @@ function assignConfigValues (originalConfig, rcConfig) {
 function rewriteHotkey (config) {
   const keys = [...Object.keys(config.hotkey)]
   keys.forEach(key => {
-    config.hotkey[key] = config.hotkey[key].replace(/Cmd/g, 'Command')
+    config.hotkey[key] = config.hotkey[key].replace(/Cmd\s/g, 'Command ')
     config.hotkey[key] = config.hotkey[key].replace(/Opt\s/g, 'Option ')
   })
   return config
