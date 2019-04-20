@@ -8,7 +8,7 @@ import consts from 'browser/lib/consts'
 import Raphael from 'raphael'
 import flowchart from 'flowchart'
 import mermaidRender from './render/MermaidRender'
-import SequenceDiagram from 'js-sequence-diagrams'
+import SequenceDiagram from '@rokt33r/js-sequence-diagrams'
 import Chart from 'chart.js'
 import eventEmitter from 'browser/main/lib/eventEmitter'
 import htmlTextHelper from 'browser/lib/htmlTextHelper'
@@ -282,33 +282,27 @@ export default class MarkdownPreview extends React.Component {
 
   handleMouseDown (e) {
     const config = ConfigManager.get()
+    const clickElement = e.target
+    const targetTag = clickElement.tagName // The direct parent HTML of where was clicked ie "BODY" or "DIV"
+    const lineNumber = getSourceLineNumberByElement(clickElement) // Line location of element clicked.
+
     if (config.editor.switchPreview === 'RIGHTCLICK' && e.buttons === 2 && config.editor.type === 'SPLIT') {
       eventEmitter.emit('topbar:togglemodebutton', 'CODE')
     }
     if (e.ctrlKey) {
       if (config.editor.type === 'SPLIT') {
-        const clickElement = e.target
-        const lineNumber = getSourceLineNumberByElement(clickElement)
         if (lineNumber !== -1) {
           eventEmitter.emit('line:jump', lineNumber)
         }
       } else {
-        const clickElement = e.target
-        const lineNumber = getSourceLineNumberByElement(clickElement)
         if (lineNumber !== -1) {
           eventEmitter.emit('editor:focus')
           eventEmitter.emit('line:jump', lineNumber)
         }
       }
     }
-    if (e.target != null) {
-      switch (e.target.tagName) {
-        case 'A':
-        case 'INPUT':
-          return null
-      }
-    }
-    if (this.props.onMouseDown != null) this.props.onMouseDown(e)
+
+    if (this.props.onMouseDown != null && targetTag === 'BODY') this.props.onMouseDown(e)
   }
 
   handleMouseUp (e) {

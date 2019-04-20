@@ -14,6 +14,8 @@ import {
 import TextEditorInterface from 'browser/lib/TextEditorInterface'
 import eventEmitter from 'browser/main/lib/eventEmitter'
 import iconv from 'iconv-lite'
+
+import { isMarkdownTitleURL } from 'browser/lib/utils'
 import styles from '../components/CodeEditor.styl'
 const { ipcRenderer, remote, clipboard } = require('electron')
 import normalizeEditorFontFamily from 'browser/lib/normalizeEditorFontFamily'
@@ -22,6 +24,7 @@ const buildEditorContextMenu = require('browser/lib/contextMenuBuilder')
 import TurndownService from 'turndown'
 import {languageMaps} from '../lib/CMLanguageList'
 import snippetManager from '../lib/SnippetManager'
+import {generateInEditor, tocExistsInEditor} from 'browser/lib/markdown-toc-generator'
 
 CodeMirror.modeURL = '../node_modules/codemirror/mode/%N/%N.js'
 
@@ -196,6 +199,26 @@ export default class CodeEditor extends React.Component {
       },
       'Cmd-T': function (cm) {
         // Do nothing
+      },
+      'Ctrl-/': function (cm) {
+        if (global.process.platform === 'darwin') { return }
+        const dateNow = new Date()
+        cm.replaceSelection(dateNow.toLocaleDateString())
+      },
+      'Cmd-/': function (cm) {
+        if (global.process.platform !== 'darwin') { return }
+        const dateNow = new Date()
+        cm.replaceSelection(dateNow.toLocaleDateString())
+      },
+      'Shift-Ctrl-/': function (cm) {
+        if (global.process.platform === 'darwin') { return }
+        const dateNow = new Date()
+        cm.replaceSelection(dateNow.toLocaleString())
+      },
+      'Shift-Cmd-/': function (cm) {
+        if (global.process.platform !== 'darwin') { return }
+        const dateNow = new Date()
+        cm.replaceSelection(dateNow.toLocaleString())
       },
       Enter: 'boostNewLineAndIndentContinueMarkdownList',
       'Ctrl-C': cm => {
@@ -594,12 +617,46 @@ export default class CodeEditor extends React.Component {
   handleChange (editor, changeObject) {
     spellcheck.handleChange(editor, changeObject)
 
+    // The current note contains an toc. We'll check for changes on headlines.
+    // origin is undefined when markdownTocGenerator replace the old tod
+    if (tocExistsInEditor(editor) && changeObject.origin !== undefined) {
+      let requireTocUpdate
+
+      // Check if one of the changed lines contains a headline
+      for (let line = 0; line < changeObject.text.length; line++) {
+        if (this.linePossibleContainsHeadline(editor.getLine(changeObject.from.line + line))) {
+          requireTocUpdate = true
+          break
+        }
+      }
+
+      if (!requireTocUpdate) {
+        // Check if one of the removed lines contains a headline
+        for (let line = 0; line < changeObject.removed.length; line++) {
+          if (this.linePossibleContainsHeadline(changeObject.removed[line])) {
+            requireTocUpdate = true
+            break
+          }
+        }
+      }
+
+      if (requireTocUpdate) {
+        generateInEditor(editor)
+      }
+    }
+
     this.updateHighlight(editor, changeObject)
 
     this.value = editor.getValue()
     if (this.props.onChange) {
       this.props.onChange(editor)
     }
+  }
+
+  linePossibleContainsHeadline (currentLine) {
+    // We can't check if the line start with # because when some write text before
+    // the # we also need to update the toc
+    return currentLine.includes('# ')
   }
 
   incrementLines (start, linesAdded, linesRemoved, editor) {
@@ -809,6 +866,8 @@ export default class CodeEditor extends React.Component {
 
     if (isInFencedCodeBlock(editor)) {
       this.handlePasteText(editor, pastedTxt)
+    } else if (fetchUrlTitle && isMarkdownTitleURL(pastedTxt) && !isInLinkTag(editor)) {
+      this.handlePasteUrl(editor, pastedTxt)
     } else if (fetchUrlTitle && isURL(pastedTxt) && !isInLinkTag(editor)) {
       this.handlePasteUrl(editor, pastedTxt)
     } else if (attachmentManagement.isAttachmentLink(pastedTxt)) {
@@ -850,7 +909,17 @@ export default class CodeEditor extends React.Component {
   }
 
   handlePasteUrl (editor, pastedTxt) {
-    const taggedUrl = `<${pastedTxt}>`
+    let taggedUrl = `<${pastedTxt}>`
+    let urlToFetch = pastedTxt
+    let titleMark = ''
+
+    if (isMarkdownTitleURL(pastedTxt)) {
+      const pastedTxtSplitted = pastedTxt.split(' ')
+      titleMark = `${pastedTxtSplitted[0]} `
+      urlToFetch = pastedTxtSplitted[1]
+      taggedUrl = `<${urlToFetch}>`
+    }
+
     editor.replaceSelection(taggedUrl)
 
     const isImageReponse = response => {
@@ -862,22 +931,23 @@ export default class CodeEditor extends React.Component {
     const replaceTaggedUrl = replacement => {
       const value = editor.getValue()
       const cursor = editor.getCursor()
-      const newValue = value.replace(taggedUrl, replacement)
+      const newValue = value.replace(taggedUrl, titleMark + replacement)
       const newCursor = Object.assign({}, cursor, {
-        ch: cursor.ch + newValue.length - value.length
+        ch: cursor.ch + newValue.length - (value.length - titleMark.length)
       })
+
       editor.setValue(newValue)
       editor.setCursor(newCursor)
     }
 
-    fetch(pastedTxt, {
+    fetch(urlToFetch, {
       method: 'get'
     })
       .then(response => {
         if (isImageReponse(response)) {
-          return this.mapImageResponse(response, pastedTxt)
+          return this.mapImageResponse(response, urlToFetch)
         } else {
-          return this.mapNormalResponse(response, pastedTxt)
+          return this.mapNormalResponse(response, urlToFetch)
         }
       })
       .then(replacement => {

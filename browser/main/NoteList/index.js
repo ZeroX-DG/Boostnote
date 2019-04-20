@@ -259,13 +259,22 @@ class NoteList extends React.Component {
   }
 
   jumpNoteByHashHandler (event, noteHash) {
+    const { data } = this.props
+
     // first argument event isn't used.
     if (this.notes === null || this.notes.length === 0) {
       return
     }
 
     const selectedNoteKeys = [noteHash]
-    this.focusNote(selectedNoteKeys, noteHash, '/home')
+
+    let locationToSelect = '/home'
+    const noteByHash = data.noteMap.map((note) => note).find(note => note.key === noteHash)
+    if (noteByHash !== undefined) {
+      locationToSelect = '/storages/' + noteByHash.storage + '/folders/' + noteByHash.folder
+    }
+
+    this.focusNote(selectedNoteKeys, noteHash, locationToSelect)
 
     ee.emit('list:moved')
   }
@@ -886,7 +895,7 @@ class NoteList extends React.Component {
     if (!location.pathname.match(/\/trashed/)) this.addNotesFromFiles(filepaths)
   }
 
-  // Add notes to the current folder
+ // Add notes to the current folder
   addNotesFromFiles (filepaths) {
     const { dispatch, location } = this.props
     const { storage, folder } = this.resolveTargetFolder()
@@ -910,13 +919,20 @@ class NoteList extends React.Component {
           }
           dataApi.createNote(storage.key, newNote)
           .then((note) => {
-            dispatch({
-              type: 'UPDATE_NOTE',
-              note: note
-            })
-            hashHistory.push({
-              pathname: location.pathname,
-              query: {key: getNoteKey(note)}
+            attachmentManagement.importAttachments(note.content, filepath, storage.key, note.key)
+            .then((newcontent) => {
+              note.content = newcontent
+
+              dataApi.updateNote(storage.key, note.key, note)
+
+              dispatch({
+                type: 'UPDATE_NOTE',
+                note: note
+              })
+              hashHistory.push({
+                pathname: location.pathname,
+                query: {key: getNoteKey(note)}
+              })
             })
           })
         })
