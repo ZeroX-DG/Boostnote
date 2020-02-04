@@ -32,7 +32,9 @@ export const DEFAULT_CONFIG = {
     toggleMain: OSX ? 'Command + Alt + L' : 'Super + Alt + E',
     toggleMode: OSX ? 'Command + Alt + M' : 'Ctrl + M',
     toggleDirection: OSX ? 'Command + Alt + Right' : 'Ctrl + Right',
-    deleteNote: OSX ? 'Command + Shift + Backspace' : 'Ctrl + Shift + Backspace',
+    deleteNote: OSX
+      ? 'Command + Shift + Backspace'
+      : 'Ctrl + Shift + Backspace',
     pasteSmartly: OSX ? 'Command + Shift + V' : 'Ctrl + Shift + V',
     prettifyMarkdown: OSX ? 'Command + Shift + F' : 'Ctrl + Shift + F',
     sortLines: OSX ? 'Command + Shift + S' : 'Ctrl + Shift + S',
@@ -115,7 +117,7 @@ export const DEFAULT_CONFIG = {
   coloredTags: {}
 }
 
-function validate (config) {
+function validate(config) {
   if (!_.isObject(config)) return false
   if (!_.isNumber(config.zoom) || config.zoom < 0) return false
   if (!_.isBoolean(config.isSideNavFolded)) return false
@@ -124,13 +126,17 @@ function validate (config) {
   return true
 }
 
-function _save (config) {
+function _save(config) {
   window.localStorage.setItem('config', JSON.stringify(config))
 }
 
-function get () {
+function get() {
   const rawStoredConfig = window.localStorage.getItem('config')
-  const storedConfig = Object.assign({}, DEFAULT_CONFIG, JSON.parse(rawStoredConfig))
+  const storedConfig = Object.assign(
+    {},
+    DEFAULT_CONFIG,
+    JSON.parse(rawStoredConfig)
+  )
   let config = storedConfig
 
   try {
@@ -144,7 +150,10 @@ function get () {
     _save(config)
   }
 
-  config.autoUpdateEnabled = electronConfig.get('autoUpdateEnabled', config.autoUpdateEnabled)
+  config.autoUpdateEnabled = electronConfig.get(
+    'autoUpdateEnabled',
+    config.autoUpdateEnabled
+  )
 
   if (!isInitialized) {
     isInitialized = true
@@ -156,7 +165,9 @@ function get () {
       document.head.appendChild(editorTheme)
     }
 
-    const theme = consts.THEMES.find(theme => theme.name === config.editor.theme)
+    const theme = consts.THEMES.find(
+      theme => theme.name === config.editor.theme
+    )
 
     if (theme) {
       editorTheme.setAttribute('href', theme.path)
@@ -168,7 +179,7 @@ function get () {
   return config
 }
 
-function set (updates) {
+function set(updates) {
   const currentConfig = get()
 
   const arrangedUpdates = updates
@@ -176,7 +187,12 @@ function set (updates) {
     arrangedUpdates.preview.customCSS = DEFAULT_CONFIG.preview.customCSS
   }
 
-  const newConfig = Object.assign({}, DEFAULT_CONFIG, currentConfig, arrangedUpdates)
+  const newConfig = Object.assign(
+    {},
+    DEFAULT_CONFIG,
+    currentConfig,
+    arrangedUpdates
+  )
   if (!validate(newConfig)) throw new Error('INVALID CONFIG')
   _save(newConfig)
 
@@ -204,7 +220,9 @@ function set (updates) {
     document.head.appendChild(editorTheme)
   }
 
-  const newTheme = consts.THEMES.find(theme => theme.name === newConfig.editor.theme)
+  const newTheme = consts.THEMES.find(
+    theme => theme.name === newConfig.editor.theme
+  )
 
   if (newTheme) {
     editorTheme.setAttribute('href', newTheme.path)
@@ -218,20 +236,45 @@ function set (updates) {
   ee.emit('config-renew')
 }
 
-function assignConfigValues (originalConfig, rcConfig) {
+function assignConfigValues(originalConfig, rcConfig) {
   const config = Object.assign({}, DEFAULT_CONFIG, originalConfig, rcConfig)
-  config.hotkey = Object.assign({}, DEFAULT_CONFIG.hotkey, originalConfig.hotkey, rcConfig.hotkey)
-  config.blog = Object.assign({}, DEFAULT_CONFIG.blog, originalConfig.blog, rcConfig.blog)
-  config.ui = Object.assign({}, DEFAULT_CONFIG.ui, originalConfig.ui, rcConfig.ui)
-  config.editor = Object.assign({}, DEFAULT_CONFIG.editor, originalConfig.editor, rcConfig.editor)
-  config.preview = Object.assign({}, DEFAULT_CONFIG.preview, originalConfig.preview, rcConfig.preview)
+  config.hotkey = Object.assign(
+    {},
+    DEFAULT_CONFIG.hotkey,
+    originalConfig.hotkey,
+    rcConfig.hotkey
+  )
+  config.blog = Object.assign(
+    {},
+    DEFAULT_CONFIG.blog,
+    originalConfig.blog,
+    rcConfig.blog
+  )
+  config.ui = Object.assign(
+    {},
+    DEFAULT_CONFIG.ui,
+    originalConfig.ui,
+    rcConfig.ui
+  )
+  config.editor = Object.assign(
+    {},
+    DEFAULT_CONFIG.editor,
+    originalConfig.editor,
+    rcConfig.editor
+  )
+  config.preview = Object.assign(
+    {},
+    DEFAULT_CONFIG.preview,
+    originalConfig.preview,
+    rcConfig.preview
+  )
 
   rewriteHotkey(config)
 
   return config
 }
 
-function rewriteHotkey (config) {
+function rewriteHotkey(config) {
   const keys = [...Object.keys(config.hotkey)]
   keys.forEach(key => {
     config.hotkey[key] = config.hotkey[key].replace(/Cmd\s/g, 'Command ')
