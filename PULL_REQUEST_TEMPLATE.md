@@ -39,4 +39,4 @@ Change :white_circle: to :radio_button: in all the options that apply
 - :white_circle: All existing tests have been passed
 - :white_circle: I have attached a screenshot/video to visualize my change if possible
 - :white_circle: This PR will modify the UI or affects the UX
-- :white_circle: This PR will add/update/delete keybinding
+- :white_circle: This PR will add/update/delete a keybinding
