@@ -374,8 +374,9 @@ class MarkdownPreview extends React.Component {
     }
   }
 
-  handleSearch(_, keyword) {
-    this.refs.root.contentWindow.find(keyword)
+  handleSearch(_, searchData) {
+    const { value, direction } = searchData
+    this.refs.root.contentWindow.find(value, true, direction === 'backward')
   }
 
   handleContextMenu(event) {
