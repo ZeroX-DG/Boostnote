@@ -350,6 +350,7 @@ class MarkdownPreview extends React.Component {
     this.resizeHandler = _.throttle(this.handleResize.bind(this), 100)
 
     this.linkClickHandler = this.handleLinkClick.bind(this)
+    this.handleSearch = this.handleSearch.bind(this)
     this.initMarkdown = this.initMarkdown.bind(this)
     this.initMarkdown()
   }
@@ -371,6 +372,10 @@ class MarkdownPreview extends React.Component {
     if (this.props.onScroll) {
       this.props.onScroll(e)
     }
+  }
+
+  handleSearch(_, keyword) {
+    this.refs.root.contentWindow.find(keyword)
   }
 
   handleContextMenu(event) {
@@ -657,6 +662,7 @@ class MarkdownPreview extends React.Component {
     eventEmitter.on('export:save-html', this.saveAsHtmlHandler)
     eventEmitter.on('export:save-pdf', this.saveAsPdfHandler)
     eventEmitter.on('print', this.printHandler)
+    eventEmitter.on('preview:search', this.handleSearch)
   }
 
   componentWillUnmount() {
@@ -699,6 +705,7 @@ class MarkdownPreview extends React.Component {
     eventEmitter.off('export:save-html', this.saveAsHtmlHandler)
     eventEmitter.off('export:save-pdf', this.saveAsPdfHandler)
     eventEmitter.off('print', this.printHandler)
+    eventEmitter.off('preview:search', this.handleSearch)
   }
 
   componentDidUpdate(prevProps) {
