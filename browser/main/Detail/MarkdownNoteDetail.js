@@ -544,17 +544,27 @@ class MarkdownNoteDetail extends React.Component {
           </div>
 
           <div styleName='info-extra'>
-            <TagSelect
-              ref='tags'
-              value={this.state.note.tags}
-              saveTagsAlphabetically={config.ui.saveTagsAlphabetically}
-              showTagsAlphabetically={config.ui.showTagsAlphabetically}
-              data={data}
-              dispatch={dispatch}
-              onChange={this.handleUpdateTag.bind(this)}
-              coloredTags={config.coloredTags}
-            />
-            <PreviewSearch />
+            <div
+              styleName={`extra-part-${
+                this.state.editorType !== 'EDITOR_PREVIEW' ? 'half' : 'full'
+              }`}
+            >
+              <TagSelect
+                ref='tags'
+                value={this.state.note.tags}
+                saveTagsAlphabetically={config.ui.saveTagsAlphabetically}
+                showTagsAlphabetically={config.ui.showTagsAlphabetically}
+                data={data}
+                dispatch={dispatch}
+                onChange={this.handleUpdateTag.bind(this)}
+                coloredTags={config.coloredTags}
+              />
+            </div>
+            {this.state.editorType !== 'EDITOR_PREVIEW' && (
+              <div styleName='extra-part-half'>
+                <PreviewSearch />
+              </div>
+            )}
           </div>
           <TodoListPercentage
             onClearCheckboxClick={e => this.handleClearTodo(e)}
